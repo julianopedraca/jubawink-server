@@ -1,0 +1,218 @@
+definitions:
+  models.Exercise:
+    properties:
+      exerciseName:
+        maxLength: 100
+        type: string
+      reps:
+        type: integer
+      sets:
+        type: integer
+      weight:
+        type: integer
+    type: object
+  models.User:
+    properties:
+      email:
+        maxLength: 100
+        type: string
+      password:
+        maxLength: 21
+        minLength: 6
+        type: string
+      username:
+        maxLength: 50
+        type: string
+    required:
+    - email
+    - password
+    - username
+    type: object
+  models.UserCredentials:
+    properties:
+      email:
+        type: string
+      password:
+        type: string
+    type: object
+  routes.Auth:
+    properties:
+      token:
+        type: string
+    required:
+    - token
+    type: object
+  routes.AuthResponse:
+    properties:
+      message:
+        type: string
+    type: object
+  routes.ErrorResponse:
+    properties:
+      error:
+        type: string
+    type: object
+  routes.ExerciseResponse:
+    properties:
+      message:
+        type: string
+    type: object
+  routes.LoginResponse:
+    properties:
+      token:
+        type: string
+    type: object
+  routes.SendConfirmationEmailResponse:
+    properties:
+      message:
+        type: string
+    type: object
+  routes.SignupResponse:
+    properties:
+      message:
+        type: string
+    type: object
+info:
+  contact: {}
+paths:
+  /email/signup/confirmation:
+    get:
+      description: Sends a signup confirmation email to the specified user.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/routes.SendConfirmationEmailResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/routes.ErrorResponse'
+      summary: Send Confirmation Email
+      tags:
+      - Email
+  /exercise/add:
+    post:
+      consumes:
+      - application/json
+      description: Adds a new exercise to the database.
+      parameters:
+      - description: Bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Exercise details
+        in: body
+        name: exercise
+        required: true
+        schema:
+          $ref: '#/definitions/models.Exercise'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/routes.ExerciseResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/routes.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/routes.ErrorResponse'
+      summary: Add Exercise
+      tags:
+      - Exercises
+  /login:
+    post:
+      consumes:
+      - application/json
+      description: Authenticates a user by validating email and password, and returns
+        a JWT token upon successful login.
+      parameters:
+      - description: User email and password
+        in: body
+        name: userCredentials
+        required: true
+        schema:
+          $ref: '#/definitions/models.UserCredentials'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/routes.LoginResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/routes.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/routes.ErrorResponse'
+      summary: User Login
+      tags:
+      - Authentication
+  /signup:
+    post:
+      consumes:
+      - application/json
+      description: Creates a new user account with the provided details. Passwords
+        are hashed before being stored.
+      parameters:
+      - description: User details
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/models.User'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/routes.SignupResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/routes.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/routes.ErrorResponse'
+      summary: User Signup
+      tags:
+      - Authentication
+  /user/validate:
+    post:
+      consumes:
+      - application/json
+      description: Validates a given JWT token to ensure it is authentic and not expired.
+      parameters:
+      - description: Token to validate
+        in: body
+        name: auth
+        required: true
+        schema:
+          $ref: '#/definitions/routes.Auth'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/routes.AuthResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/routes.ErrorResponse'
+      summary: Validate Token
+      tags:
+      - Authentication
+swagger: "2.0"

@@ -1,0 +1,7 @@
+
+# environments 
+.env
+*.env
+
+# redis configuration
+internal/redis/redis-stack.conf

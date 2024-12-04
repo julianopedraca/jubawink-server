@@ -1,0 +1,12 @@
+.git
+*.md
+.cache
+*.env
+.env
+.gitignore
+Dockerfile
+Dockerfile.dockerignore
+docker-compose.yml
+scripts
+pgdata
+LICENSE
