@@ -5,3 +5,7 @@
 
 # redis configuration
 internal/redis/redis-stack.conf
+
+# database
+pgdata
+pgdata/**

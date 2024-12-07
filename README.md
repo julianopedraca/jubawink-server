@@ -10,3 +10,13 @@ generate swagger docs
 ```sh
 swag init -g ./cmd/jubawink/main.go -o ./docs
 ```
+
+build project
+```sh
+make build
+```
+
+genarate swagger docs and run project
+```sh
+make
+```

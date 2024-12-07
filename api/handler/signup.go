@@ -96,9 +96,11 @@ func Signup(ginContext *gin.Context) {
 	go func(key string, delay time.Duration) {
 		time.Sleep(delay)
 		err := rdb.Del(context.Background(), key).Err()
-		log.WithFields(log.Fields{
-			"error": err.Error(),
-		}).Error("Unable to delete user from redis.")
+		if err != nil {
+			log.WithFields(log.Fields{
+				"error": err.Error(),
+			}).Error("Unable to delete user from redis.")
+		}
 	}(uuid, 5*time.Minute)
 
 	ginContext.JSON(http.StatusOK, gin.H{"message": "Confirmation email send."})

@@ -1,4 +1,41 @@
 definitions:
+  handler.Auth:
+    properties:
+      token:
+        type: string
+    required:
+    - token
+    type: object
+  handler.AuthResponse:
+    properties:
+      message:
+        type: string
+    type: object
+  handler.ErrorResponse:
+    properties:
+      error:
+        type: string
+    type: object
+  handler.ExerciseResponse:
+    properties:
+      message:
+        type: string
+    type: object
+  handler.LoginResponse:
+    properties:
+      token:
+        type: string
+    type: object
+  handler.SendConfirmationEmailResponse:
+    properties:
+      message:
+        type: string
+    type: object
+  handler.SignupResponse:
+    properties:
+      message:
+        type: string
+    type: object
   models.Exercise:
     properties:
       exerciseName:
@@ -35,43 +72,6 @@ definitions:
       password:
         type: string
     type: object
-  routes.Auth:
-    properties:
-      token:
-        type: string
-    required:
-    - token
-    type: object
-  routes.AuthResponse:
-    properties:
-      message:
-        type: string
-    type: object
-  routes.ErrorResponse:
-    properties:
-      error:
-        type: string
-    type: object
-  routes.ExerciseResponse:
-    properties:
-      message:
-        type: string
-    type: object
-  routes.LoginResponse:
-    properties:
-      token:
-        type: string
-    type: object
-  routes.SendConfirmationEmailResponse:
-    properties:
-      message:
-        type: string
-    type: object
-  routes.SignupResponse:
-    properties:
-      message:
-        type: string
-    type: object
 info:
   contact: {}
 paths:
@@ -84,11 +84,11 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/routes.SendConfirmationEmailResponse'
+            $ref: '#/definitions/handler.SendConfirmationEmailResponse'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/routes.ErrorResponse'
+            $ref: '#/definitions/handler.ErrorResponse'
       summary: Send Confirmation Email
       tags:
       - Email
@@ -115,18 +115,35 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/routes.ExerciseResponse'
+            $ref: '#/definitions/handler.ExerciseResponse'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/routes.ErrorResponse'
+            $ref: '#/definitions/handler.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/routes.ErrorResponse'
+            $ref: '#/definitions/handler.ErrorResponse'
       summary: Add Exercise
       tags:
       - Exercises
+  /info:
+    get:
+      consumes:
+      - application/json
+      description: Check if server is returning Ok.
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.SignupResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+      summary: Server Info
+      tags:
+      - Health Check
   /login:
     post:
       consumes:
@@ -146,15 +163,15 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/routes.LoginResponse'
+            $ref: '#/definitions/handler.LoginResponse'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/routes.ErrorResponse'
+            $ref: '#/definitions/handler.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/routes.ErrorResponse'
+            $ref: '#/definitions/handler.ErrorResponse'
       summary: User Login
       tags:
       - Authentication
@@ -177,15 +194,15 @@ paths:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/routes.SignupResponse'
+            $ref: '#/definitions/handler.SignupResponse'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/routes.ErrorResponse'
+            $ref: '#/definitions/handler.ErrorResponse'
         "500":
           description: Internal Server Error
           schema:
-            $ref: '#/definitions/routes.ErrorResponse'
+            $ref: '#/definitions/handler.ErrorResponse'
       summary: User Signup
       tags:
       - Authentication
@@ -200,18 +217,18 @@ paths:
         name: auth
         required: true
         schema:
-          $ref: '#/definitions/routes.Auth'
+          $ref: '#/definitions/handler.Auth'
       produces:
       - application/json
       responses:
         "200":
           description: OK
           schema:
-            $ref: '#/definitions/routes.AuthResponse'
+            $ref: '#/definitions/handler.AuthResponse'
         "400":
           description: Bad Request
           schema:
-            $ref: '#/definitions/routes.ErrorResponse'
+            $ref: '#/definitions/handler.ErrorResponse'
       summary: Validate Token
       tags:
       - Authentication
