@@ -9,3 +9,6 @@ internal/redis/redis-stack.conf
 # database
 pgdata
 pgdata/**
+
+#Dockerfile.prod
+Dockerfile.prod
