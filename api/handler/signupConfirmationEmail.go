@@ -17,6 +17,10 @@ type SendConfirmationEmailResponse struct {
 	Message string `json:"message"`
 }
 
+type ErrorResponse struct {
+	Error string `json:"error"`
+}
+
 // @BasePath /api/v1
 
 // @Summary Send Confirmation Email

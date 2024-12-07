@@ -22,6 +22,7 @@ func RegisterRoutes(server *gin.Engine) {
 	server.POST("/signup", h.Signup)
 	server.POST("/user/validate", h.ValidateToken)
 	server.GET("/email/confirmation/:uuid", h.ConfirmationEmail)
+	server.GET("/info", h.Info)
 
 	authenticated := server.Group("/")
 	authenticated.Use(middleware.Authenticate)
@@ -40,6 +41,7 @@ func RegisterRoutes(server *gin.Engine) {
 			swag.POST("/signup", h.Signup)
 			swag.POST("/user/validate", h.ValidateToken)
 			swag.GET("/email/confirmation", h.ConfirmationEmail)
+			swag.GET("/info", h.Info)
 
 			authenticatedSwag.POST("/exercise/add", h.AddExercise)
 		}

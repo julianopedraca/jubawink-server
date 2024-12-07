@@ -10,3 +10,4 @@ docker-compose.yml
 scripts
 pgdata
 LICENSE
+pgdata/**
