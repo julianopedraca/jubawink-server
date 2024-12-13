@@ -8,14 +8,13 @@ build:
 	docker compose up --build
 
 build-prod:
-	@if docker images -q golang-web-api; then \
-		echo "Removing existing golang-web-api image..."; \
-		docker rmi -f golang-web-api:latest || true; \
+	@if docker images -q 028788912057.dkr.ecr.us-east-1.amazonaws.com/jubawink-api; then \
+		echo "Removing existing 028788912057.dkr.ecr.us-east-1.amazonaws.com/jubawink-api image..."; \
+		docker rmi -f 028788912057.dkr.ecr.us-east-1.amazonaws.com/jubawink-api || true; \
 	fi
-	docker buildx build -t golang-web-api:latest -f Dockerfile.prod .
-	docker run -d --publish 8888:8080 golang-web-api
-docker-ecr-push:
-	docker tag golang-web-api:latest 028788912057.dkr.ecr.us-east-1.amazonaws.com/teste:latest
-	docker push 028788912057.dkr.ecr.us-east-1.amazonaws.com/teste:latest
+	aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 028788912057.dkr.ecr.us-east-1.amazonaws.com && \
+	docker buildx build -t jubawink-api -f Dockerfile.prod . && \
+	docker tag jubawink-api:latest 028788912057.dkr.ecr.us-east-1.amazonaws.com/jubawink-api:latest && \
+	docker push 028788912057.dkr.ecr.us-east-1.amazonaws.com/jubawink-api:latest
 clean-docker-images:
 	docker images -f "dangling=true" -q | xargs -r docker rmi
