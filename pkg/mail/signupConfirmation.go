@@ -18,7 +18,7 @@ func SendSignupConfirmation(email string, uuid string) error {
 		return err
 	}
 	message.SetHeader("From", "juliano.pedraca@gmail.com")
-	message.SetHeader("To", "juliano.pedraca@gmail.com")
+	message.SetHeader("To", email)
 	message.SetHeader("Subject", "Email Confirmation")
 
 	message.SetBody("text/plain", "Thanks for trying my app, to confirm your email please click here")

@@ -1,8 +1,6 @@
 package main
 
 import (
-	"log"
-	"net/http"
 	"os"
 
 	"github.com/gin-contrib/cors"
@@ -10,6 +8,8 @@ import (
 	"github.com/julianopedraca/jubawink/api/routes"
 	"github.com/julianopedraca/jubawink/internal/database"
 	"github.com/julianopedraca/jubawink/internal/redis"
+
+	log "github.com/sirupsen/logrus"
 )
 
 func main() {
@@ -18,7 +18,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("Failed to initialize database: %v", err)
 	}
-	host := os.Getenv("HOST")
+	// host := os.Getenv("HOST")
 	client := os.Getenv("CLIENT_URL")
 	// connect to redis
 	redis.ConnectRedis()
@@ -36,10 +36,11 @@ func main() {
 
 	// Setup Security Headers
 	server.Use(func(c *gin.Context) {
-		if c.Request.Host != host {
-			c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Invalid host header"})
-			return
-		}
+		// fix for aws so we can prevent server side request forgery (SSRF) https://owasp.org/Top10/pt_BR/A10_2021-Server-Side_Request_Forgery_(SSRF)/
+		// if c.Request.Host != host {
+		// 	c.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": "Invalid host header"})
+		// 	return
+		// }
 		c.Header("X-Frame-Options", "DENY")
 		c.Header("Content-Security-Policy", "default-src 'self'; connect-src *; font-src *; script-src-elem * 'unsafe-inline'; img-src * data:; style-src * 'unsafe-inline';")
 		c.Header("X-XSS-Protection", "1; mode=block")
@@ -52,6 +53,7 @@ func main() {
 
 	routes.RegisterRoutes(server)
 
+	log.Info("Server running o port 8080.")
 	server.Run(":8080")
 
 	database.Db.Close()
