@@ -3,15 +3,16 @@ services:
   # App Service
   gin-server:
     # Configuration for building the docker image for the service
-    container_name: gin-server
+    container_name: gin-server-debug
     build:
       context: . # Use an image built from the specified dockerfile in the current directory.
-      dockerfile: Dockerfile
-    command: ["go","run","cmd/jubawink/main.go"]
+      dockerfile: Dockerfile.debug
+    command: ["dlv", "--headless", "--listen=:2345", "--api-version=2", "--log", "--accept-multiclient", "debug", "cmd/jubawink/main.go"]
     depends_on:
       - database
     ports:
       - "4000:8080"
+      - "2345:2345"
     env_file:
       - .env
     volumes:

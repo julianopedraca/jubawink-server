@@ -7,6 +7,12 @@ start:
 build:
 	docker compose up --build
 
+build-debug:
+	docker-compose -f docker-compose.debug.yml up --build
+
+debug:
+	docker-compose -f docker-compose.debug.yml up
+
 build-prod:
 	@if docker images -q 028788912057.dkr.ecr.us-east-1.amazonaws.com/jubawink-api; then \
 		echo "Removing existing 028788912057.dkr.ecr.us-east-1.amazonaws.com/jubawink-api image..."; \

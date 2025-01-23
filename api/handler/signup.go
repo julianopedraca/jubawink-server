@@ -1,24 +1,21 @@
 package handler
 
 import (
-	"context"
-	"encoding/json"
 	"net/http"
-	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/julianopedraca/jubawink/internal/database/models"
-	"github.com/julianopedraca/jubawink/internal/redis"
-	"github.com/julianopedraca/jubawink/pkg/mail"
 	"github.com/julianopedraca/jubawink/pkg/utils"
-
-	"github.com/google/uuid"
 
 	log "github.com/sirupsen/logrus"
 )
 
 type SignupResponse struct {
 	Message string `json:"message"`
+}
+
+type ErrorResponse struct {
+	Error string `json:"error"`
 }
 
 // @BasePath /api/v1
@@ -35,10 +32,6 @@ type SignupResponse struct {
 // @Router /signup [post]
 func Signup(ginContext *gin.Context) {
 	var user models.User
-	var rdb = redis.Rdb
-	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
-	defer cancel()
-
 	err := ginContext.ShouldBindJSON(&user)
 	if err != nil {
 		log.WithFields(log.Fields{
@@ -57,34 +50,17 @@ func Signup(ginContext *gin.Context) {
 		return
 	}
 
-	uuid := uuid.NewString()
 	user.Password = hashedPassword
 
-	userData := &models.User{
-		UserName: user.UserName,
-		Email:    user.Email,
-		Password: user.Password,
-	}
-
-	userJson, err := json.Marshal(userData)
+	err = user.Save()
 	if err != nil {
 		log.WithFields(log.Fields{
 			"error": err.Error(),
-		}).Error("Failed to marshal user data.")
-		ginContext.JSON(http.StatusInternalServerError, gin.H{"error": "Something went wrong, please try again later."})
+		}).Error("Unable to save user to the data base.")
+		ginContext.JSON(http.StatusBadRequest, gin.H{"error": "Something went wrong, please try again later."})
 		return
 	}
 
-	err = rdb.JSONSet(ctx, uuid, "$", userJson).Err()
-	if err != nil {
-		log.WithFields(log.Fields{
-			"error": err.Error(),
-		}).Error("Unable to save user to redis.")
-		ginContext.JSON(http.StatusBadGateway, gin.H{"error": "Unable to save user to redis."})
-		return
-	}
-
-	err = mail.SendSignupConfirmation(user.Email, uuid)
 	if err != nil {
 		log.WithFields(log.Fields{
 			"error": err.Error(),
@@ -93,15 +69,5 @@ func Signup(ginContext *gin.Context) {
 		return
 	}
 
-	go func(key string, delay time.Duration) {
-		time.Sleep(delay)
-		err := rdb.Del(context.Background(), key).Err()
-		if err != nil {
-			log.WithFields(log.Fields{
-				"error": err.Error(),
-			}).Error("Unable to delete user from redis.")
-		}
-	}(uuid, 5*time.Minute)
-
-	ginContext.JSON(http.StatusOK, gin.H{"message": "Confirmation email send."})
+	ginContext.JSON(http.StatusOK, gin.H{"message": "User created."})
 }

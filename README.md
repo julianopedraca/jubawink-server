@@ -6,6 +6,11 @@ Migrate database
 migrate -path internal/database/migration -database "postgres://postgres:example@0.0.0.0:5432/jubawink?sslmode=disable" -verbose up
 ```
 
+Create new migration file
+```sh
+migrate create -ext sql -dir internal/database/migration -seq create_users_table
+```
+
 generate swagger docs
 ```sh
 swag init -g ./cmd/jubawink/main.go -o ./docs
@@ -20,3 +25,4 @@ genarate swagger docs and run project
 ```sh
 make
 ```
+
