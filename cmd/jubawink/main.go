@@ -7,7 +7,6 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/julianopedraca/jubawink/api/routes"
 	"github.com/julianopedraca/jubawink/internal/database"
-	"github.com/julianopedraca/jubawink/internal/redis"
 
 	log "github.com/sirupsen/logrus"
 )
@@ -20,9 +19,6 @@ func main() {
 	}
 	// host := os.Getenv("HOST")
 	client := os.Getenv("CLIENT_URL")
-	// connect to redis
-	redis.ConnectRedis()
-
 	server := gin.Default()
 
 	// Add CORS middleware

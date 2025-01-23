@@ -17,5 +17,4 @@ import (
 // @Router /info [get]
 func Info(context *gin.Context) {
 	context.JSON(http.StatusOK, gin.H{"message": "Server is up."})
-
 }

@@ -4,7 +4,10 @@
 *.env
 .env
 .gitignore
+.vscode
 Dockerfile
+Dockerfile.debug
+Dockerfile.prod
 Dockerfile.dockerignore
 docker-compose.yml
 scripts

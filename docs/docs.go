@@ -15,32 +15,6 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/email/signup/confirmation": {
-            "get": {
-                "description": "Sends a signup confirmation email to the specified user.",
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Email"
-                ],
-                "summary": "Send Confirmation Email",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/handler.SendConfirmationEmailResponse"
-                        }
-                    },
-                    "400": {
-                        "description": "Bad Request",
-                        "schema": {
-                            "$ref": "#/definitions/handler.ErrorResponse"
-                        }
-                    }
-                }
-            }
-        },
         "/exercise/add": {
             "post": {
                 "description": "Adds a new exercise to the database.",
@@ -251,6 +225,50 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/workout/user": {
+            "get": {
+                "description": "Fetches workouts for a specific user from the database.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Workout"
+                ],
+                "summary": "Get Workout By UserId",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handler.WorkoutResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handler.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/handler.ErrorResponse"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -297,7 +315,7 @@ const docTemplate = `{
                 }
             }
         },
-        "handler.SendConfirmationEmailResponse": {
+        "handler.SignupResponse": {
             "type": "object",
             "properties": {
                 "message": {
@@ -305,7 +323,7 @@ const docTemplate = `{
                 }
             }
         },
-        "handler.SignupResponse": {
+        "handler.WorkoutResponse": {
             "type": "object",
             "properties": {
                 "message": {
