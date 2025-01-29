@@ -15,7 +15,7 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/exercise/add": {
+        "/exercise/add/lifting": {
             "post": {
                 "description": "Adds a new exercise to the database.",
                 "consumes": [
@@ -37,12 +37,12 @@ const docTemplate = `{
                         "required": true
                     },
                     {
-                        "description": "Exercise details",
+                        "description": "Exercise Lifting Save details",
                         "name": "exercise",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/models.Exercise"
+                            "$ref": "#/definitions/models.ExerciseLiftingSave"
                         }
                     }
                 ],
@@ -226,6 +226,59 @@ const docTemplate = `{
                 }
             }
         },
+        "/workout/save": {
+            "post": {
+                "description": "Saves a workout for a specific user into the database.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Workout"
+                ],
+                "summary": "Save Workout",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "Workout save details",
+                        "name": "workout",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.WorkoutSave"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handler.WorkoutResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handler.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/handler.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/workout/user": {
             "get": {
                 "description": "Fetches workouts for a specific user from the database.",
@@ -331,9 +384,12 @@ const docTemplate = `{
                 }
             }
         },
-        "models.Exercise": {
+        "models.ExerciseLiftingSave": {
             "type": "object",
             "properties": {
+                "WorkoutId": {
+                    "type": "integer"
+                },
                 "exerciseName": {
                     "type": "string",
                     "maxLength": 100
@@ -380,6 +436,15 @@ const docTemplate = `{
                 },
                 "password": {
                     "type": "string"
+                }
+            }
+        },
+        "models.WorkoutSave": {
+            "type": "object",
+            "properties": {
+                "workoutType": {
+                    "type": "string",
+                    "maxLength": 20
                 }
             }
         }
