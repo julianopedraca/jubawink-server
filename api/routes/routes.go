@@ -25,8 +25,9 @@ func RegisterRoutes(server *gin.Engine) {
 
 	authenticated := server.Group("/")
 	authenticated.Use(middleware.Authenticate)
-	authenticated.POST("/exercise/add", h.AddExercise)
+	authenticated.POST("/exercise/add/lifting", h.AddExerciseLifting)
 	authenticated.GET("/workout/user", h.GetWorkoutsByUserId)
+	authenticated.POST("/workout/save", h.SaveWorkout)
 
 	// Initialize swagger
 	if os.Getenv("GIN_MODE") == "debug" {
@@ -42,8 +43,9 @@ func RegisterRoutes(server *gin.Engine) {
 			swag.POST("/user/validate", h.ValidateToken)
 			swag.GET("/info", h.Info)
 
-			authenticatedSwag.POST("/exercise/add", h.AddExercise)
+			authenticatedSwag.POST("/exercise/add/lifting", h.AddExerciseLifting)
 			authenticatedSwag.GET("/workout/user", h.GetWorkoutsByUserId)
+			authenticatedSwag.POST("/workout/save", h.SaveWorkout)
 		}
 		server.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 	}

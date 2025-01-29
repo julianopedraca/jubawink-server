@@ -21,14 +21,13 @@ type ExerciseResponse struct {
 // @Accept json
 // @Produce json
 // @Param Authorization header string true "Bearer token"
-// @Param exercise body models.Exercise true "Exercise details"
+// @Param exercise body models.ExerciseLiftingSave true "Exercise Lifting Save details"
 // @Success 200 {object} ExerciseResponse
 // @Failure 400 {object} ErrorResponse
 // @Failure 500 {object} ErrorResponse
-// @Router /exercise/add [post]
-func AddExercise(context *gin.Context) {
-	var exercise models.Exercise
-	exercise.UserId = context.Keys["userId"].(int64)
+// @Router /exercise/add/lifting [post]
+func AddExerciseLifting(context *gin.Context) {
+	var exercise models.ExerciseLiftingSave
 
 	err := context.ShouldBindJSON(&exercise)
 	if err != nil {
