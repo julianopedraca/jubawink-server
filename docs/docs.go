@@ -15,6 +15,59 @@ const docTemplate = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/exercise/add/cycling": {
+            "post": {
+                "description": "Adds a new cycling exercise to the database.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Exercises"
+                ],
+                "summary": "Add Cycling Exercise",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "Exercise cycling Save details",
+                        "name": "exercise",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.ExerciseCyclingSave"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handler.ExerciseResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handler.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/handler.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/exercise/add/lifting": {
             "post": {
                 "description": "Adds a new exercise to the database.",
@@ -68,6 +121,103 @@ const docTemplate = `{
                 }
             }
         },
+        "/exercise/add/running": {
+            "post": {
+                "description": "Adds a new Running exercise to the database.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Exercises"
+                ],
+                "summary": "Add Running Exercise",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    },
+                    {
+                        "description": "Exercise Running Save details",
+                        "name": "exercise",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.ExerciseRunningSave"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handler.ExerciseResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handler.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/handler.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/exercise/get/cycling": {
+            "get": {
+                "description": "Get cycling exercises from userId.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Exercises"
+                ],
+                "summary": "Get Exercise",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handler.ExerciseResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handler.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/handler.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/exercise/get/lifting": {
             "get": {
                 "description": "Get lifting exercises from userId.",
@@ -81,6 +231,47 @@ const docTemplate = `{
                     "Exercises"
                 ],
                 "summary": "Get Exercise",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Bearer token",
+                        "name": "Authorization",
+                        "in": "header",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/handler.ExerciseResponse"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "$ref": "#/definitions/handler.ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/handler.ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/exercise/get/running": {
+            "get": {
+                "description": "Retrieves all running exercises for a specific user.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Exercises"
+                ],
+                "summary": "Get Running Exercises",
                 "parameters": [
                     {
                         "type": "string",
@@ -428,12 +619,29 @@ const docTemplate = `{
                 }
             }
         },
+        "models.ExerciseCyclingSave": {
+            "type": "object",
+            "properties": {
+                "averageSpeed": {
+                    "type": "integer"
+                },
+                "caloriesBurned": {
+                    "type": "integer"
+                },
+                "distanceKm": {
+                    "type": "integer"
+                },
+                "elevationGainM": {
+                    "type": "integer"
+                },
+                "workoutId": {
+                    "type": "integer"
+                }
+            }
+        },
         "models.ExerciseLiftingSave": {
             "type": "object",
             "properties": {
-                "WorkoutId": {
-                    "type": "integer"
-                },
                 "exerciseName": {
                     "type": "string",
                     "maxLength": 100
@@ -445,6 +653,26 @@ const docTemplate = `{
                     "type": "integer"
                 },
                 "weight": {
+                    "type": "integer"
+                },
+                "workoutId": {
+                    "type": "integer"
+                }
+            }
+        },
+        "models.ExerciseRunningSave": {
+            "type": "object",
+            "properties": {
+                "averagePace": {
+                    "type": "string"
+                },
+                "caloriesBurned": {
+                    "type": "integer"
+                },
+                "distanceKm": {
+                    "type": "integer"
+                },
+                "workoutId": {
                     "type": "integer"
                 }
             }

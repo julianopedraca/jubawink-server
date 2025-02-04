@@ -36,10 +36,21 @@ definitions:
       message:
         type: string
     type: object
+  models.ExerciseCyclingSave:
+    properties:
+      averageSpeed:
+        type: integer
+      caloriesBurned:
+        type: integer
+      distanceKm:
+        type: integer
+      elevationGainM:
+        type: integer
+      workoutId:
+        type: integer
+    type: object
   models.ExerciseLiftingSave:
     properties:
-      WorkoutId:
-        type: integer
       exerciseName:
         maxLength: 100
         type: string
@@ -48,6 +59,19 @@ definitions:
       sets:
         type: integer
       weight:
+        type: integer
+      workoutId:
+        type: integer
+    type: object
+  models.ExerciseRunningSave:
+    properties:
+      averagePace:
+        type: string
+      caloriesBurned:
+        type: integer
+      distanceKm:
+        type: integer
+      workoutId:
         type: integer
     type: object
   models.User:
@@ -83,6 +107,41 @@ definitions:
 info:
   contact: {}
 paths:
+  /exercise/add/cycling:
+    post:
+      consumes:
+      - application/json
+      description: Adds a new cycling exercise to the database.
+      parameters:
+      - description: Bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Exercise cycling Save details
+        in: body
+        name: exercise
+        required: true
+        schema:
+          $ref: '#/definitions/models.ExerciseCyclingSave'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.ExerciseResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+      summary: Add Cycling Exercise
+      tags:
+      - Exercises
   /exercise/add/lifting:
     post:
       consumes:
@@ -118,6 +177,70 @@ paths:
       summary: Add Exercise
       tags:
       - Exercises
+  /exercise/add/running:
+    post:
+      consumes:
+      - application/json
+      description: Adds a new Running exercise to the database.
+      parameters:
+      - description: Bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      - description: Exercise Running Save details
+        in: body
+        name: exercise
+        required: true
+        schema:
+          $ref: '#/definitions/models.ExerciseRunningSave'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.ExerciseResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+      summary: Add Running Exercise
+      tags:
+      - Exercises
+  /exercise/get/cycling:
+    get:
+      consumes:
+      - application/json
+      description: Get cycling exercises from userId.
+      parameters:
+      - description: Bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.ExerciseResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+      summary: Get Exercise
+      tags:
+      - Exercises
   /exercise/get/lifting:
     get:
       consumes:
@@ -145,6 +268,33 @@ paths:
           schema:
             $ref: '#/definitions/handler.ErrorResponse'
       summary: Get Exercise
+      tags:
+      - Exercises
+  /exercise/get/running:
+    get:
+      description: Retrieves all running exercises for a specific user.
+      parameters:
+      - description: Bearer token
+        in: header
+        name: Authorization
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/handler.ExerciseResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/handler.ErrorResponse'
+      summary: Get Running Exercises
       tags:
       - Exercises
   /info:
