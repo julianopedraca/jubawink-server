@@ -27,6 +27,10 @@ func RegisterRoutes(server *gin.Engine) {
 	authenticated.Use(middleware.Authenticate)
 	authenticated.GET("/exercise/get/lifting", h.GetExerciseLifting)
 	authenticated.POST("/exercise/add/lifting", h.AddExerciseLifting)
+	authenticated.GET("/exercise/get/cycling", h.GetExerciseCycling)
+	authenticated.POST("/exercise/add/cycling", h.AddExerciseCycling)
+	authenticated.GET("/exercise/get/running", h.GetExerciseRunning)
+	authenticated.POST("/exercise/add/running", h.AddExerciseRunning)
 	authenticated.GET("/workout/user", h.GetWorkoutsByUserId)
 	authenticated.POST("/workout/save", h.SaveWorkout)
 
@@ -46,6 +50,10 @@ func RegisterRoutes(server *gin.Engine) {
 
 			authenticatedSwag.POST("/exercise/add/lifting", h.AddExerciseLifting)
 			authenticatedSwag.GET("/exercise/get/lifting", h.GetExerciseLifting)
+			authenticatedSwag.GET("/exercise/get/cycling", h.GetExerciseCycling)
+			authenticatedSwag.POST("/exercise/add/cycling", h.AddExerciseCycling)
+			authenticatedSwag.GET("/exercise/get/running", h.GetExerciseRunning)
+			authenticatedSwag.POST("/exercise/add/running", h.AddExerciseRunning)
 			authenticatedSwag.GET("/workout/user", h.GetWorkoutsByUserId)
 			authenticatedSwag.POST("/workout/save", h.SaveWorkout)
 		}
